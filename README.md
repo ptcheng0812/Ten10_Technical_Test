@@ -14,5 +14,6 @@ Test a responsive interest calculator web application.
 
 ## How to Run
 ```sh
+npm install
 npx playwright test
 ```
