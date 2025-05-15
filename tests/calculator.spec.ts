@@ -30,54 +30,54 @@ test('Options able to input', async ({ page }) => {
   //loop 1- 15% select
   await page.getByRole('button', { name: 'Select Interest Rate' }).click();
   for (let i = 1; i <= 15; i++) {
-    if (i != 13) {
-      await page.getByRole('checkbox', { name: `${i}%`, exact: true }).check();
-    }
+    // if (i != 13) {
+    await page.getByRole('checkbox', { name: `${i}%`, exact: true }).check();
+    // }
   }
 
 });
 
 test('Validate Interest Rate and Total Amount Is Correct', async ({ page }) => {
   for (let i = 1; i <= 15; i++) {
-    if (i != 13) {
-      await page.getByRole('slider', { name: 'Principal Amount:' }).fill('15000');
-      await page.locator('#dropdownMenuButton').click()
-      await page.getByRole('checkbox', { name: `${i}%`, exact: true }).check();
-      await page.getByLabel(`Selected Rate: ${i}%`).locator('div').filter({ hasText: `${i}%` }).first().click();
-      await page.getByRole('link', { name: 'Daily' }).click();
-      await page.getByRole('checkbox', { name: 'Please accept this mandatory' }).check();
-      await page.getByRole('button', { name: 'Calculate' }).click();
-      let interestTextD: string = await page.getByRole('heading', { name: 'Interest Amount:' }).textContent() ?? "";
-      let interestD: string = interestTextD?.replace('Interest Amount: ', '').trim() ?? ""
-      let totalAmountTextD: string = await page.getByRole('heading', { name: 'Total Amount with Interest:' }).textContent() ?? "";
-      let totalAmountD: string = totalAmountTextD?.replace('Total Amount with Interest: ', '').trim() ?? ""
-      expect(interestD?.trim()).toMatch(/^\d+\.\d{2}$/);
-      expect(totalAmountD?.trim()).toMatch(/^\d+\.\d{2}$/);
-      expect(interestD).toBe((parseFloat('0.41') * i).toFixed(2).toString());
-      expect(totalAmountD).toBe((parseFloat('0.41') * i + 15000.00).toFixed(2).toString());
+    // if (i != 13) {
+    await page.getByRole('slider', { name: 'Principal Amount:' }).fill('15000');
+    await page.locator('#dropdownMenuButton').click()
+    await page.getByRole('checkbox', { name: `${i}%`, exact: true }).check();
+    await page.getByLabel(`Selected Rate: ${i}%`).locator('div').filter({ hasText: `${i}%` }).first().click();
+    await page.getByRole('link', { name: 'Daily' }).click();
+    await page.getByRole('checkbox', { name: 'Please accept this mandatory' }).check();
+    await page.getByRole('button', { name: 'Calculate' }).click();
+    let interestTextD: string = await page.getByRole('heading', { name: 'Interest Amount:' }).textContent() ?? "";
+    let interestD: string = interestTextD?.replace('Interest Amount: ', '').trim() ?? ""
+    let totalAmountTextD: string = await page.getByRole('heading', { name: 'Total Amount with Interest:' }).textContent() ?? "";
+    let totalAmountD: string = totalAmountTextD?.replace('Total Amount with Interest: ', '').trim() ?? ""
+    expect(interestD?.trim()).toMatch(/^\d+\.\d{2}$/);
+    expect(totalAmountD?.trim()).toMatch(/^\d+\.\d{2}$/);
+    expect(interestD).toBe((parseFloat('0.41') * i).toFixed(2).toString());
+    expect(totalAmountD).toBe((parseFloat('0.41') * i + 15000.00).toFixed(2).toString());
 
-      await page.getByRole('link', { name: 'Monthly' }).click();
-      await page.getByRole('button', { name: 'Calculate' }).click();
-      let interestTextM: string = await page.getByRole('heading', { name: 'Interest Amount:' }).textContent() ?? "";
-      let interestM: string = interestTextM?.replace('Interest Amount: ', '').trim() ?? ""
-      let totalAmountTextM: string = await page.getByRole('heading', { name: 'Total Amount with Interest:' }).textContent() ?? "";
-      let totalAmountM: string = totalAmountTextM?.replace('Total Amount with Interest: ', '').trim() ?? ""
-      expect(interestM?.trim()).toMatch(/^\d+\.\d{2}$/);
-      expect(totalAmountM?.trim()).toMatch(/^\d+\.\d{2}$/);
-      expect(interestM).toBe((parseFloat('15.00') * i).toFixed(2).toString());
-      expect(totalAmountM).toBe((parseFloat('15.00') * i + 15000.00).toFixed(2).toString());
+    await page.getByRole('link', { name: 'Monthly' }).click();
+    await page.getByRole('button', { name: 'Calculate' }).click();
+    let interestTextM: string = await page.getByRole('heading', { name: 'Interest Amount:' }).textContent() ?? "";
+    let interestM: string = interestTextM?.replace('Interest Amount: ', '').trim() ?? ""
+    let totalAmountTextM: string = await page.getByRole('heading', { name: 'Total Amount with Interest:' }).textContent() ?? "";
+    let totalAmountM: string = totalAmountTextM?.replace('Total Amount with Interest: ', '').trim() ?? ""
+    expect(interestM?.trim()).toMatch(/^\d+\.\d{2}$/);
+    expect(totalAmountM?.trim()).toMatch(/^\d+\.\d{2}$/);
+    expect(interestM).toBe((parseFloat('15.00') * i).toFixed(2).toString());
+    expect(totalAmountM).toBe((parseFloat('15.00') * i + 15000.00).toFixed(2).toString());
 
-      await page.getByRole('link', { name: 'Yearly' }).click();
-      await page.getByRole('button', { name: 'Calculate' }).click();
-      let interestTextY: string = await page.getByRole('heading', { name: 'Interest Amount:' }).textContent() ?? "";
-      let interestY: string = interestTextY?.replace('Interest Amount: ', '').trim() ?? ""
-      let totalAmountTextY: string = await page.getByRole('heading', { name: 'Total Amount with Interest:' }).textContent() ?? "";
-      let totalAmountY: string = totalAmountTextY?.replace('Total Amount with Interest: ', '').trim() ?? ""
-      expect(interestY?.trim()).toMatch(/^\d+\.\d{2}$/);
-      expect(totalAmountY?.trim()).toMatch(/^\d+\.\d{2}$/);
-      expect(interestY).toBe((parseFloat('150.00') * i).toFixed(2).toString());
-      expect(totalAmountY).toBe((parseFloat('150.00') * i + 15000.00).toFixed(2).toString());
-    }
+    await page.getByRole('link', { name: 'Yearly' }).click();
+    await page.getByRole('button', { name: 'Calculate' }).click();
+    let interestTextY: string = await page.getByRole('heading', { name: 'Interest Amount:' }).textContent() ?? "";
+    let interestY: string = interestTextY?.replace('Interest Amount: ', '').trim() ?? ""
+    let totalAmountTextY: string = await page.getByRole('heading', { name: 'Total Amount with Interest:' }).textContent() ?? "";
+    let totalAmountY: string = totalAmountTextY?.replace('Total Amount with Interest: ', '').trim() ?? ""
+    expect(interestY?.trim()).toMatch(/^\d+\.\d{2}$/);
+    expect(totalAmountY?.trim()).toMatch(/^\d+\.\d{2}$/);
+    expect(interestY).toBe((parseFloat('150.00') * i).toFixed(2).toString());
+    expect(totalAmountY).toBe((parseFloat('150.00') * i + 15000.00).toFixed(2).toString());
+    // }
   }
 });
 
