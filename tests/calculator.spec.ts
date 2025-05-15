@@ -20,11 +20,18 @@ test('Options able to input', async ({ page }) => {
   await page.getByRole('link', { name: 'Yearly' }).click();
 
   await page.getByRole('slider', { name: 'Principal Amount:' }).fill('0');
-  await page.getByRole('slider', { name: 'Principal Amount:' }).fill('3500');
-  await page.getByRole('slider', { name: 'Principal Amount:' }).fill('7500');
-  await page.getByRole('slider', { name: 'Principal Amount:' }).fill('11500');
-  await page.getByRole('slider', { name: 'Principal Amount:' }).fill('15000');
+  await page.locator('#dropdownMenuButton').click()
 
+  await page.getByRole('slider', { name: 'Principal Amount:' }).fill('3500');
+  await page.getByText('3500')
+  await page.getByRole('slider', { name: 'Principal Amount:' }).fill('7500');
+  await page.getByText('7500')
+  await page.getByRole('slider', { name: 'Principal Amount:' }).fill('11500');
+  await page.getByText('11500')
+  await page.getByRole('slider', { name: 'Principal Amount:' }).fill('15000');
+  await page.getByText('15000')
+
+  // selectedValue
   await page.getByRole('checkbox', { name: 'Please accept this mandatory' }).check();
 
   //loop 1- 15% select
@@ -83,31 +90,36 @@ test('Validate Interest Rate and Total Amount Is Correct', async ({ page }) => {
 
 test('Verify Error Dialogue Message when Inputs are empty or not selected', async ({ page }) => {
   //Without select % and mandatory checkbox not ticked
+  let dialogAppearedAll = false;
   page.once('dialog', dialog => {
     const message = dialog.message();
-    console.log(`Dialog message: ${message}`);
     expect(message).toBe("Please fill in all fields.");
+    dialogAppearedAll = true;
     dialog.dismiss().catch(() => { });
   });
   await page.getByRole('button', { name: 'Calculate' }).click();
+  expect(dialogAppearedAll).toBe(true);
 
   //Selected % and mandatory checkbox not ticked
+  let dialogAppearedCheckBox = false;
   await page.getByRole('button', { name: 'Select Interest Rate' }).click();
   await page.getByRole('checkbox', { name: '1%', exact: true }).check();
   await page.getByLabel('Selected Rate: 1%').locator('div').filter({ hasText: '1%' }).first().click();
-
   page.once('dialog', dialog => {
     const message = dialog.message();
-    console.log(`Dialog message: ${message}`);
     expect(message).toBe("Please fill in all fields.");
+    dialogAppearedCheckBox = true;
     dialog.dismiss().catch(() => { });
   });
   await page.getByRole('button', { name: 'Calculate' }).click();
+  await page.waitForTimeout(500);
+  expect(dialogAppearedCheckBox).toBe(true);
 });
 
 
 test('Show error messages for empty fields', async ({ page }) => {
   await page.getByRole('button', { name: 'Calculate' }).click();
+  //Need to find out where logging the empty fields error
   const errorMessages = await page.locator('.error-message').allTextContents();
 
   expect(errorMessages).toContain('Interest rate must be selected');
